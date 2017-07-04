@@ -2,30 +2,17 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, HttpResponseForbidden
 from django.utils import timezone
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+
 import googlemaps
+
 from .forms import BookingForm, JoinForm
 from .models import Booking
 from car.models import Car
+
 from datetime import datetime
-
 #TODO: Move booking to another place maybe in the models
-def get_cars():
-	#TODO: maybe change the return in exception to empty list so we have a consisant return type
-	"""
-	This function return all available cars
-	:return: Cars with diponility = True
-	:rtype: list of Car objects
-
-	:exception ObjectDoesNotExist: if there is no car available return None
-
-	"""
-	try:
-		return Car.objects.filter(disponibility=True)
-	except ObjectDoesNotExist:
-		return None
-
 def set_car_disponibility(id_car, state):
 	"""
 	This function set the car disponibility
@@ -62,7 +49,7 @@ def get_bookings(user_request):
 	:rtype: list of Booking objects
 	"""
 	try:
-		return Booking.objects.filter(user=user_request)
+		return Booking.objects.filter(user=user_request.id)
 	except ObjectDoesNotExist:
 		return None
 
@@ -87,7 +74,20 @@ def delete_booking(id_booking):
 # gmaps direction
 
 def get_duration(start_address, dest_address):
-	gmaps = googlemaps.Client(key='HARDCODED_KEY')
+	#TODO: Move hardcoded key to settings
+	#TODO: add error logging
+	"""
+	Change the rasise execption to unknown duration
+	for exemple negative duration
+	:param start_address: start address of the travel
+	:param dest_address: destination addres of the travel
+	:return: a string which is the duration
+	"""
+	try:
+		gmaps = googlemaps.Client(key="HARDCODED KEY")
+	except ValueError:
+		return "Unknown duration"
+
 	now = datetime.now()
 	try:
 		directions_result = gmaps.directions(
@@ -95,9 +95,15 @@ def get_duration(start_address, dest_address):
 			dest_address,
 			mode="driving",
 			departure_time=now)
-		return directions_result[0]['legs'][0]['duration_in_traffic']['text']
 	except googlemaps.exceptions.ApiError as inst:
-		raise Http404(inst.args[0])
+		duration = "Unknown duration"
+		return duration
+	try:
+		duration = directions_result[0]['legs'][0]['duration_in_traffic']['text']
+		return duration
+	except Exception:
+		return "Unknown duration"
+
 
 # Views functions
 
@@ -127,10 +133,11 @@ def new(request):
 		booking.duration = get_duration(booking.start_address, booking.dest_address)
 		booking.state = True
 
-		if get_cars():
-			booking.car = get_cars()[0]	#TODO: maybe use variable
+		available_car = Car.objects.get_available_cars()
+		if available_car:
+			booking.car = available_car[0]
 
-			set_car_disponibility(get_cars()[0].id, False)
+			set_car_disponibility(booking.car.id, False)
 		booking.save()
 		return redirect('/bookings/' + str(booking))
 
