@@ -1,27 +1,38 @@
+#TODO: Reorganize the imports
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, HttpResponseForbidden
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
-
+import googlemaps
 from .forms import BookingForm, JoinForm
 from .models import Booking
 from car.models import Car
+from datetime import datetime
 
-import googlemaps
-from datetime import datetime, timedelta
-
-# Create your views here.
-
-# Utils database functions
-
+#TODO: Move booking to another place maybe in the models
 def get_cars():
+	#TODO: maybe change the return in exception to empty list so we have a consisant return type
+	"""
+	This function return all available cars
+	:return: Cars with diponility = True
+	:rtype: list of Car objects
+
+	:exception ObjectDoesNotExist: if there is no car available return None
+
+	"""
 	try:
 		return Car.objects.filter(disponibility=True)
 	except ObjectDoesNotExist:
 		return None
 
 def set_car_disponibility(id_car, state):
+	"""
+	This function set the car disponibility
+	:param id_car: id of the car
+	:param state: State of the car (True if the car is available False else)
+	:return:
+	"""
 	try:
 		car = Car.objects.get(id=id_car)
 		car.disponibility = state
@@ -30,18 +41,42 @@ def set_car_disponibility(id_car, state):
 		return None
 
 def get_booking(id_booking):
+	"""
+	This function search retreive the booking with id_booking
+	:param id_booking: id of the booking
+	:return: Booking object if it exist else None
+	"""
 	try:
 		return Booking.objects.get(id=id_booking)
 	except ObjectDoesNotExist:
 		return None
 
+
 def get_bookings(user_request):
+	#TODO: Change function name
+	#TODO: Change return type to get a consistant return type
+	"""
+	Get all the booking to a related user
+	:param user_request: user we want bookings
+	:return: All the booking related to a user
+	:rtype: list of Booking objects
+	"""
 	try:
 		return Booking.objects.filter(user=user_request)
 	except ObjectDoesNotExist:
 		return None
 
 def delete_booking(id_booking):
+	#TODO: Move this function to the model
+	"""
+	LOGIC
+	=====
+		Get the booking
+		set the car disponibility to True
+		delete the booking
+	:param id_booking:
+	:return:
+	"""
 	try:
 		inst = Booking.objects.get(id=id_booking)
 		set_car_disponibility(inst.car.id, True)
@@ -91,8 +126,10 @@ def new(request):
 		booking.dest_address = form.cleaned_data['dest_address']
 		booking.duration = get_duration(booking.start_address, booking.dest_address)
 		booking.state = True
+
 		if get_cars():
-			booking.car = get_cars()[0]
+			booking.car = get_cars()[0]	#TODO: maybe use variable
+
 			set_car_disponibility(get_cars()[0].id, False)
 		booking.save()
 		return redirect('/bookings/' + str(booking))
