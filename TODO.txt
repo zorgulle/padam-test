@@ -1,0 +1,12 @@
+Project observation
+===================
+* Chose between French or English (ie Booking model)
+* Add Test
+* remove hardcoded google api key
+
+Project subjection
+==================
+* Create and use API if one day an app is moved to another place.
+* clarify some variable name (ie data)
+* Add url workflow
+*

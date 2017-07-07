@@ -39,7 +39,6 @@ class BookingManager(models.Manager):
 			return None
 
 	def delete_booking(id_booking):
-		# TODO: Move this function to the model
 		"""
 		LOGIC
 		=====
@@ -55,15 +54,16 @@ class BookingManager(models.Manager):
 			return inst.delete()
 		except ObjectDoesNotExist:
 			return None
+
 class Booking(models.Model):
-	date = models.DateTimeField(auto_now_add=True, auto_now=False,
+	create_date = models.DateTimeField(auto_now_add=True, auto_now=False,
                                 verbose_name="Date de creation")
-	reservation_date = models.DateTimeField(auto_now_add=False, auto_now=False, verbose_name="Date de réservation")
+	booking_date = models.DateTimeField(auto_now_add=False, auto_now=False, verbose_name="Date de réservation")
 	car = models.OneToOneField(Car, related_name='car')
 	user = models.ForeignKey(User, related_name='user')
 	start_address = models.CharField(max_length=250, verbose_name="Adresse de départ")
 	dest_address = models.CharField(max_length=250, verbose_name="Adresse de destination")
-	state = models.BooleanField()
+	state = models.BooleanField() # TODO: What is the use of this field
 	duration = models.CharField(max_length=10)
 
 	objects = BookingManager()

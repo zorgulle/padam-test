@@ -10,10 +10,21 @@ from .utils import get_duration
 from datetime import datetime
 
 def home(request):
+	"""
+	Home view
+	:param request:
+	:return:
+	"""
 	data = Booking.objects.get_bookings_related_to_user(request.user)
 	return render(request,'booking/home.html', dict([("bookings", data)]))
 
 def booking(request, bookingID):
+	"""
+	detail view of a booking
+	:param request:
+	:param bookingID: id of the booking
+	:return:
+	"""
 	data = Booking.objects.get_booking(bookingID)
 	if data.user == request.user:
 		return render(
@@ -25,13 +36,14 @@ def booking(request, bookingID):
 		return HttpResponseForbidden()
 
 def new(request):
+
 	form = BookingForm(request.POST or None)
 	if form.is_valid():
 		booking = Booking()
 		booking.user = request.user
-		booking.reservation_date = datetime.now()
-		booking.start_address = form.cleaned_data['start_address']
-		booking.dest_address = form.cleaned_data['dest_address']
+		booking.booking_date = datetime.now()
+		booking.start_address = form.cleaned_data.get('start_address', '')
+		booking.dest_address = form.cleaned_data.get('dest_address','')
 		booking.duration = get_duration(booking.start_address, booking.dest_address)
 		booking.state = True
 
