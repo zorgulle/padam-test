@@ -6,4 +6,5 @@
 
 <p>Adresse de départ : {{ booking.start_address }} </br> Adresse de destination : {{ booking.dest_address }} </br>Durée estimé du trajet : {{ booking.duration }} </br>ID car : {{ booking.car }}</p>
 
+<a href="{% url 'booking_list' %}" ><span>Go back to you booking list</span></a>
 {% endblock %}
