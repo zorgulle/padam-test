@@ -28,7 +28,7 @@
 	{% for booking in bookings %}
 	<tr>
 		<td><a href="{% url 'booking' bookingID=booking.id %}" ><span>+</span></a></td>
-		<td>{{ booking.reservation_date }}</td>
+		<td>{{ booking.booking_date }}</td>
 		<td>{{ booking.start_address }}</td>
 		<td>{{ booking.dest_address }}</td>
 		<td>{{ booking.duration }}</td>

@@ -13,7 +13,7 @@ class BookingManager(models.Manager):
 	"""Booking model manager
 	"""
 
-	def get_booking(id_booking):
+	def get_booking(self, id_booking):
 		"""
 		This function search retreive the booking with id_booking
 		:param id_booking: id of the booking
@@ -24,7 +24,7 @@ class BookingManager(models.Manager):
 		except ObjectDoesNotExist:
 			return None
 
-	def get_bookings_related_to_user(user_request):
+	def get_bookings_related_to_user(self, user_request):
 		# TODO: Change function name
 		# TODO: Change return type to get a consistant return type
 		"""
@@ -38,7 +38,7 @@ class BookingManager(models.Manager):
 		except ObjectDoesNotExist:
 			return None
 
-	def delete_booking(id_booking):
+	def delete_booking(self, id_booking):
 		"""
 		LOGIC
 		=====

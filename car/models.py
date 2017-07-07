@@ -22,7 +22,7 @@ class CarManager(models.Manager):
 		except ObjectDoesNotExist:
 			return []
 
-	def set_car_disponibility(id_car, state):
+	def set_car_disponibility(self, id_car, state):
 		"""
 		This function set the car disponibility
 		:param id_car: id of the car

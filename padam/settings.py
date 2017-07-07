@@ -41,15 +41,15 @@ INSTALLED_APPS = [
     'car',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'booking.middleware.RequireLoginMiddleware'
 ]
 
 ROOT_URLCONF = 'padam.urls'
@@ -136,3 +136,5 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/bookings/logout(.*)$',
     r'/bookings/join(.*)$',
 )
+
+GOOGLE_MAP_API_KEY="MY KEY"
