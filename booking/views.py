@@ -54,7 +54,7 @@ def delete_booking(id_booking):
 	"""
 	try:
 		inst = Booking.objects.get(id=id_booking)
-		set_car_disponibility(inst.car.id, True)
+		Car.objects.set_car_disponibility(inst.car.id, True)
 		return inst.delete()
 	except ObjectDoesNotExist:
 		return None
