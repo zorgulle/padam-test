@@ -22,6 +22,20 @@ class CarManager(models.Manager):
 		except ObjectDoesNotExist:
 			return []
 
+	def set_car_disponibility(id_car, state):
+		"""
+		This function set the car disponibility
+		:param id_car: id of the car
+		:param state: State of the car (True if the car is available False else)
+		:return:
+		"""
+		try:
+			car = Car.objects.get(id=id_car)
+			car.disponibility = state
+			car.save()
+		except ObjectDoesNotExist:
+			return None
+
 
 class Car(models.Model):
 	disponibility = models.BooleanField()

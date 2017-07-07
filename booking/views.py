@@ -13,19 +13,7 @@ from car.models import Car
 
 from datetime import datetime
 #TODO: Move booking to another place maybe in the models
-def set_car_disponibility(id_car, state):
-	"""
-	This function set the car disponibility
-	:param id_car: id of the car
-	:param state: State of the car (True if the car is available False else)
-	:return:
-	"""
-	try:
-		car = Car.objects.get(id=id_car)
-		car.disponibility = state
-		car.save()
-	except ObjectDoesNotExist:
-		return None
+
 
 def get_booking(id_booking):
 	"""
@@ -137,7 +125,7 @@ def new(request):
 		if available_car:
 			booking.car = available_car[0]
 
-			set_car_disponibility(booking.car.id, False)
+			Car.objects.set_car_disponibility(booking.car.id, False)
 		booking.save()
 		return redirect('/bookings/' + str(booking))
 
