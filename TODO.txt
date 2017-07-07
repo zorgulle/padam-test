@@ -6,7 +6,10 @@ Project observation
 
 Project subjection
 ==================
-* Create and use API if one day an app is moved to another place.
+* Create and use API if one day an app is moved to another place only so we don't have hard reference to other app.
 * clarify some variable name (ie data)
 * Add url workflow
-*
+* Explicit link name:
+    - remove the "+" and "-" by "Book a car" and "Cancel a booking"
+* User friendly page worflow
+    - maybe go back to homepage directly after the booking creation.
